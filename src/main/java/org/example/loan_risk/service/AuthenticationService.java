@@ -1,7 +1,6 @@
 package org.example.loan_risk.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.example.loan_risk.dto.request.LoginRequest;
 import org.example.loan_risk.dto.request.RegisterRequest;
 import org.example.loan_risk.dto.response.LoginResponse;
@@ -10,7 +9,6 @@ import org.example.loan_risk.entity.User;
 import org.example.loan_risk.enums.Role;
 import org.example.loan_risk.repository.UserRepository;
 import org.example.loan_risk.security.JWTService;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,10 +30,10 @@ public class AuthenticationService {
         User user = User.builder()
                 .fullName(request.getFullName())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
                 .monthlyIncome(request.getMonthlyIncome())
-                .employeeType(request.getEmploymentType())
+                .employmentType(request.getEmploymentType())
                 .role(Role.CUSTOMER)
                 .build();
         userRepository.save(user);
@@ -46,7 +44,7 @@ public class AuthenticationService {
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .monthlyIncome(user.getMonthlyIncome())
-                .employmentType(user.getEmployeeType())
+                .employmentType(user.getEmploymentType())
                 .role(user.getRole())
                 .build();
     }

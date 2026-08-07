@@ -6,9 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.loan_risk.enums.EmploymentType;
-import org.springframework.boot.SpringApplication;
-
-import javax.swing.plaf.BorderUIResource;
 import java.math.BigDecimal;
 
 @Data

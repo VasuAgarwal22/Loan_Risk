@@ -44,7 +44,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EmploymentType employeeType;
+    private EmploymentType employmentType;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING) // database will store the actual enum type instead of the indexing
