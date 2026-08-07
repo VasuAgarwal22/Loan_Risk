@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Service
-public class JWTService {
+public class JwtService {
     private static final String SECRET_KEY =
             "LoanRiskPredictionSecretKeyForJwtAuthentication2026";
 

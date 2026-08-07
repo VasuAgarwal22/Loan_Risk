@@ -8,7 +8,7 @@ import org.example.loan_risk.dto.response.UserResponse;
 import org.example.loan_risk.entity.User;
 import org.example.loan_risk.enums.Role;
 import org.example.loan_risk.repository.UserRepository;
-import org.example.loan_risk.security.JWTService;
+import org.example.loan_risk.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +20,7 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JWTService jwtService;
+    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     public UserResponse register(RegisterRequest request){

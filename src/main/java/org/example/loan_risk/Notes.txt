@@ -1,0 +1,78 @@
+Loan Risk Prediction Backend Revision Notes
+
+Project: - Backend: Spring Boot - Frontend: React - Database:
+PostgreSQL - Security: Spring Security + JWT
+
+Completed Modules
+
+1.  Authentication
+
+-   User Registration
+-   User Login
+-   BCrypt Password Encoding
+-   JWT Token Generation
+-   JWT Validation
+-   Stateless Authentication
+
+Endpoints: POST /api/auth/register POST /api/auth/login
+
+Register Request: { “fullName”: “Vasu Agarwal”, “email”:
+“vasu@gmail.com”, “password”: “Password@123”, “phoneNumber”:
+“9876543210”, “monthlyIncome”: 50000, “employmentType”: “SALARIED” }
+
+Login Request: { “email”: “vasu@gmail.com”, “password”: “Password@123” }
+
+Login Response: { “token”: “”, “tokenType”: “Bearer”, “message”: “Login
+Successful” }
+
+------------------------------------------------------------------------
+
+2.  Transaction Module
+
+Endpoints: POST /api/transactions GET /api/transactions
+
+Authorization: Authorization: Bearer
+
+Transaction Request: { “amount”: 50000, “transactionType”: “CREDIT”,
+“transactionCategory”: “SALARY”, “description”: “August Salary”,
+“merchant”: “TCS”, “balanceAfterTransaction”: 50000,
+“transactionStatus”: “SUCCESS” }
+
+Transaction Response: { “id”: 1, “amount”: 50000, “transactionType”:
+“CREDIT”, “transactionCategory”: “SALARY”, “description”: “August
+Salary”, “balanceAfterTransaction”: 50000, “transactionDate”: “…”,
+“transactionStatus”: “SUCCESS”, “merchant”: “TCS” }
+
+------------------------------------------------------------------------
+
+Project Structure
+
+config/ controller/ dto/ request/ response/ entity/ enums/ repository/
+security/ service/
+
+Security Classes - SecurityConfig - JwtService -
+JwtAuthenticationFilter - CustomUserDetailsService - UserPrincipal -
+AuthenticationFacade
+
+Repositories - UserRepository - TransactionRepository
+
+Entities - User - Transaction
+
+Flow
+
+Register ↓ User saved (password encrypted) ↓ Login ↓ JWT Generated ↓
+Frontend stores JWT ↓ JWT sent in Authorization header ↓
+JwtAuthenticationFilter validates token ↓ Authenticated user available ↓
+Transaction saved for logged-in user
+
+Frontend Requirements 1. Register page 2. Login page 3. Store JWT after
+login 4. Send JWT in Authorization header: Bearer 5. Add Transaction
+page 6. Transaction History page
+
+Next Backend Modules - Loan Application - Risk Assessment - Admin
+Dashboard - Loan Approval - Loan Risk Prediction Engine
+
+Notes - DTOs are used between frontend and backend. - Entities are
+mapped to database tables. - Never return entities directly to the
+frontend. - Passwords are stored using BCrypt. - JWT validity: 24
+hours. - Transaction APIs require a valid JWT.

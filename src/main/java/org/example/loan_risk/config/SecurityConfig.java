@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-
 private final JwtAuthenticationFilter jwtAuthenticationFilter;
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -36,7 +35,8 @@ private final JwtAuthenticationFilter jwtAuthenticationFilter;
                     .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(auth-> auth.requestMatchers("/api/auth/**",
                                                                       "/swagger-ui/**",
-                                                                      "/v3/api-docs/**")
+                                                                      "/v3/api-docs/**"
+                            )
                             .permitAll()
                             .anyRequest()
                             .authenticated())

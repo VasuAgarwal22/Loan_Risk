@@ -7,7 +7,6 @@ import org.example.loan_risk.dto.request.LoginRequest;
 import org.example.loan_risk.dto.request.RegisterRequest;
 import org.example.loan_risk.dto.response.LoginResponse;
 import org.example.loan_risk.dto.response.UserResponse;
-import org.example.loan_risk.entity.User;
 import org.example.loan_risk.service.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

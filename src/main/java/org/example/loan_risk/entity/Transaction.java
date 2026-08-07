@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.loan_risk.enums.TransactionCategory;
+import org.example.loan_risk.enums.TransactionStatus;
 import org.example.loan_risk.enums.TransactionType;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -30,8 +32,9 @@ public class Transaction {
     @Column(nullable = false)
     private TransactionType transactionType;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String category;
+    private TransactionCategory transactionCategory;
 
     private String description;
 
@@ -44,4 +47,10 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",nullable = false)
     private User user;
+
+    private String merchant;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TransactionStatus status;
 }
