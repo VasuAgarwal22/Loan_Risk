@@ -55,40 +55,37 @@ export default function TransactionForm({ onSubmit, submitting }) {
     setForm(initialForm)
   }
 
-  const inputClass =
-    'w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500'
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Amount *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">Amount *</label>
           <input
             type="number"
             step="0.01"
             name="amount"
             value={form.amount}
             onChange={handleChange}
-            placeholder="0.00"
-            className={inputClass}
+            placeholder="₹ 0.00"
+            className="input-base"
             required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Balance After Transaction</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">Balance After Transaction</label>
           <input
             type="number"
             step="0.01"
             name="balanceAfterTransaction"
             value={form.balanceAfterTransaction}
             onChange={handleChange}
-            placeholder="0.00"
-            className={inputClass}
+            placeholder="₹ 0.00"
+            className="input-base"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Type</label>
-          <select name="transactionType" value={form.transactionType} onChange={handleChange} className={inputClass}>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">Type</label>
+          <select name="transactionType" value={form.transactionType} onChange={handleChange} className="input-base">
             {typeOptions.map((t) => (
               <option key={t} value={t}>
                 {t}
@@ -97,8 +94,8 @@ export default function TransactionForm({ onSubmit, submitting }) {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Category</label>
-          <select name="transactionCategory" value={form.transactionCategory} onChange={handleChange} className={inputClass}>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">Category</label>
+          <select name="transactionCategory" value={form.transactionCategory} onChange={handleChange} className="input-base">
             {categoryOptions.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -107,8 +104,8 @@ export default function TransactionForm({ onSubmit, submitting }) {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Status</label>
-          <select name="transactionStatus" value={form.transactionStatus} onChange={handleChange} className={inputClass}>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">Status</label>
+          <select name="transactionStatus" value={form.transactionStatus} onChange={handleChange} className="input-base">
             {statusOptions.map((s) => (
               <option key={s} value={s}>
                 {s}
@@ -117,34 +114,40 @@ export default function TransactionForm({ onSubmit, submitting }) {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Merchant</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">Merchant</label>
           <input
             type="text"
             name="merchant"
             value={form.merchant}
             onChange={handleChange}
             placeholder="e.g. Amazon, TCS"
-            className={inputClass}
+            className="input-base"
           />
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium mb-1">Description</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1.5">Description</label>
         <textarea
           name="description"
           value={form.description}
           onChange={handleChange}
           rows="2"
           placeholder="Add a short description"
-          className={inputClass}
+          className="input-base"
         />
       </div>
-      <button
-        type="submit"
-        disabled={submitting}
-        className="w-full bg-brand-600 text-white font-semibold py-2.5 rounded-md hover:bg-brand-700 disabled:opacity-50"
-      >
-        {submitting ? 'Saving...' : 'Add Transaction'}
+      <button type="submit" disabled={submitting} className="btn-primary">
+        {submitting ? (
+          <span className="inline-flex items-center gap-2">
+            <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+            </svg>
+            Saving...
+          </span>
+        ) : (
+          'Add Transaction'
+        )}
       </button>
     </form>
   )

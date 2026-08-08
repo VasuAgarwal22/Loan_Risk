@@ -21,58 +21,71 @@ export default function RiskAssessment() {
     })
   }
 
-  const inputClass =
-    'w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500'
-
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-2">Risk Assessment</h1>
-      <div className="bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-lg px-4 py-3 mb-6">
-        🚧 This module is a placeholder. The risk assessment backend endpoints are not
-        implemented yet — the form is ready to connect once available.
+    <div className="max-w-2xl mx-auto px-4 py-10">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-accent-500 to-brand-600 text-white p-7 mb-8 shadow-soft animate-fade-in-up">
+        <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-white/10 blur-xl" />
+        <div className="relative">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider">
+            <span className="h-2 w-2 rounded-full bg-white animate-pulse-soft" /> Credit profile
+          </span>
+          <h1 className="font-display text-2xl font-bold mt-3">Risk Assessment</h1>
+          <p className="text-brand-50/90 text-sm mt-1">
+            Enter your financial details to evaluate your credit risk.
+          </p>
+        </div>
       </div>
-      <div className="bg-white rounded-xl shadow p-8">
-        <form onSubmit={handleSubmit} className="space-y-4">
+
+      <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 text-amber-800 text-sm px-4 py-3 mb-6">
+        <span className="text-lg leading-none">🚧</span>
+        <p>
+          This module is a placeholder. The risk assessment backend endpoints are not implemented
+          yet — the form is ready to connect once available.
+        </p>
+      </div>
+
+      <div className="glass-card rounded-3xl p-7 sm:p-8 animate-fade-in-up">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Monthly Income *</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Monthly Income *</label>
               <input
                 type="number"
                 step="0.01"
                 name="monthlyIncome"
                 value={form.monthlyIncome}
                 onChange={handleChange}
-                placeholder="50000"
-                className={inputClass}
+                placeholder="₹ 50000"
+                className="input-base"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Monthly Expense</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Monthly Expense</label>
               <input
                 type="number"
                 step="0.01"
                 name="monthlyExpense"
                 value={form.monthlyExpense}
                 onChange={handleChange}
-                placeholder="30000"
-                className={inputClass}
+                placeholder="₹ 30000"
+                className="input-base"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Average Balance</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Average Balance</label>
               <input
                 type="number"
                 step="0.01"
                 name="averageBalance"
                 value={form.averageBalance}
                 onChange={handleChange}
-                placeholder="20000"
-                className={inputClass}
+                placeholder="₹ 20000"
+                className="input-base"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Credit Utilization (%)</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Credit Utilization (%)</label>
               <input
                 type="number"
                 step="0.01"
@@ -80,34 +93,31 @@ export default function RiskAssessment() {
                 value={form.creditUtilization}
                 onChange={handleChange}
                 placeholder="0 - 100"
-                className={inputClass}
+                className="input-base"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Existing Loans</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Existing Loans</label>
               <input
                 type="number"
                 name="existingLoans"
                 value={form.existingLoans}
                 onChange={handleChange}
-                className={inputClass}
+                className="input-base"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Missed Payments</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Missed Payments</label>
               <input
                 type="number"
                 name="missedPayments"
                 value={form.missedPayments}
                 onChange={handleChange}
-                className={inputClass}
+                className="input-base"
               />
             </div>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-brand-600 text-white font-semibold py-2.5 rounded-md hover:bg-brand-700"
-          >
+          <button type="submit" className="btn-primary">
             Calculate Risk
           </button>
         </form>
