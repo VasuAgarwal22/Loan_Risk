@@ -23,4 +23,5 @@ public class LoanApplicationResponse {
     private LoanStatus status;
     private LocalDateTime appliedAt;
 
+
 }

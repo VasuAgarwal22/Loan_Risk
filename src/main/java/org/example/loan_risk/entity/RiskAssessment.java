@@ -28,6 +28,9 @@ public class RiskAssessment {
     private BigDecimal monthlyExpense;
 
     @Column(nullable = false)
+    private BigDecimal averageBalance;
+
+    @Column(nullable = false)
     private Integer existingLoans;
 
     @Column(nullable = false)
@@ -42,6 +45,8 @@ public class RiskAssessment {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RiskLevel riskLevel;
+
+    private String recommendation;
 
     @CreationTimestamp
     @Column(nullable = false)

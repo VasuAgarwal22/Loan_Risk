@@ -1,5 +1,6 @@
 package org.example.loan_risk.dto.request;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Positive;
@@ -23,6 +24,7 @@ public class RiskAssessmentRequest {
     private BigDecimal monthlyExpense;
 
     @PositiveOrZero
+    @Column(nullable = false)
     private BigDecimal averageBalance;
 
     @PositiveOrZero

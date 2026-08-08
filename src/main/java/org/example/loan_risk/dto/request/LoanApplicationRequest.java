@@ -17,10 +17,10 @@ public class LoanApplicationRequest {
 
     @Positive
     private BigDecimal loanAmount;
+
     @Positive
     private Integer tenureMonths;
-    @Positive
-    private BigDecimal interestRate;
+
     @NotBlank
     private String purpose;
 }
