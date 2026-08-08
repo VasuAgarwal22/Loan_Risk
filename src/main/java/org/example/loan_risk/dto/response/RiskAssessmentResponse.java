@@ -1,5 +1,6 @@
 package org.example.loan_risk.dto.response;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,9 @@ public class RiskAssessmentResponse {
     
     private Integer riskScore;
     private RiskLevel riskLevel;
+    @Column
     private String recommendation;
+
     private LocalDateTime calculatedAt;
 
 }
