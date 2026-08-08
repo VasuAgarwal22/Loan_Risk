@@ -60,8 +60,16 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      <footer className="text-center text-sm text-slate-400 py-4">
-        Loan Risk Predictor · Spring Boot + React
+      <footer className="border-t border-white/20 mt-10">
+        <div className="h-px bg-gradient-to-r from-transparent via-brand-400/50 to-transparent" />
+        <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+          <span className="text-sm text-slate-500">
+            Loan Risk Predictor · Spring Boot + React
+          </span>
+          <span className="text-xs text-slate-400">
+            Built with <span className="text-brand-500">♥</span> for smarter credit decisions
+          </span>
+        </div>
       </footer>
     </div>
   )
