@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'
 import Transactions from './pages/Transactions'
 import AddTransaction from './pages/AddTransaction'
 import ApplyLoan from './pages/ApplyLoan'
+import MyLoans from './pages/MyLoans'
 import RiskAssessment from './pages/RiskAssessment'
 
 export default function App() {
@@ -41,11 +42,19 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route
+<Route
             path="/apply-loan"
             element={
               <ProtectedRoute>
                 <ApplyLoan />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-loans"
+            element={
+              <ProtectedRoute>
+                <MyLoans />
               </ProtectedRoute>
             }
           />

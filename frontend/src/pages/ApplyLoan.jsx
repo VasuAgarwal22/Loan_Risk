@@ -1,22 +1,36 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { applyForLoan, getErrorMessage } from '../api'
 
 export default function ApplyLoan() {
   const [form, setForm] = useState({
     loanAmount: '',
     tenureMonths: '',
-    interestRate: '',
     purpose: '',
   })
+  const [submitting, setSubmitting] = useState(false)
+  const navigate = useNavigate()
 
-  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  const handleChange = (e) =>
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Backend loan application endpoints are not implemented yet.
-    toast('Loan application backend is coming soon. Form is ready!', {
-      icon: '🚧',
-    })
+    setSubmitting(true)
+    try {
+      const payload = {
+        loanAmount: Number(form.loanAmount),
+        tenureMonths: Number(form.tenureMonths),
+        purpose: form.purpose.trim(),
+      }
+      await applyForLoan(payload)
+      toast.success('Loan application submitted successfully!')
+      navigate('/my-loans')
+    } catch (err) {
+      toast.error(getErrorMessage(err, 'Failed to submit loan application'))
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -34,14 +48,6 @@ export default function ApplyLoan() {
         </div>
       </div>
 
-      <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 text-amber-800 text-sm px-4 py-3 mb-6">
-        <span className="text-lg leading-none">🚧</span>
-        <p>
-          This module is a placeholder. The loan application backend endpoints are not implemented
-          yet — the form is ready to connect once available.
-        </p>
-      </div>
-
       <div className="glass-card rounded-3xl p-7 sm:p-8 animate-fade-in-up">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -50,6 +56,7 @@ export default function ApplyLoan() {
               <input
                 type="number"
                 step="0.01"
+                min="1"
                 name="loanAmount"
                 value={form.loanAmount}
                 onChange={handleChange}
@@ -62,23 +69,11 @@ export default function ApplyLoan() {
               <label className="block text-sm font-medium text-slate-700 mb-1.5">Tenure (Months) *</label>
               <input
                 type="number"
+                min="1"
                 name="tenureMonths"
                 value={form.tenureMonths}
                 onChange={handleChange}
                 placeholder="24"
-                className="input-base"
-                required
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Interest Rate (%) *</label>
-              <input
-                type="number"
-                step="0.01"
-                name="interestRate"
-                value={form.interestRate}
-                onChange={handleChange}
-                placeholder="10.5"
                 className="input-base"
                 required
               />
@@ -96,8 +91,18 @@ export default function ApplyLoan() {
               required
             />
           </div>
-          <button type="submit" className="btn-primary">
-            Submit Application
+          <button type="submit" disabled={submitting} className="btn-primary">
+            {submitting ? (
+              <span className="inline-flex items-center gap-2">
+                <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                </svg>
+                Submitting...
+              </span>
+            ) : (
+              'Submit Application'
+            )}
           </button>
         </form>
       </div>

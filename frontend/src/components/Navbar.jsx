@@ -6,7 +6,8 @@ const navItems = [
   { to: '/', label: 'Dashboard' },
   { to: '/transactions', label: 'Transactions' },
   { to: '/add-transaction', label: 'Add Transaction' },
-  { to: '/apply-loan', label: 'Apply Loan' },
+{ to: '/apply-loan', label: 'Apply Loan' },
+  { to: '/my-loans', label: 'My Loans' },
   { to: '/risk-assessment', label: 'Risk Check' },
 ]
 
