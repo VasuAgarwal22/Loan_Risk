@@ -8,6 +8,7 @@ import org.example.loan_risk.dto.response.UserResponse;
 import org.example.loan_risk.entity.User;
 import org.example.loan_risk.enums.Role;
 import org.example.loan_risk.repository.UserRepository;
+import org.example.loan_risk.security.AuthenticationFacade;
 import org.example.loan_risk.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,10 +19,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
+private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final AuthenticationFacade authenticationFacade;
 
     public UserResponse register(RegisterRequest request){
         if(userRepository.existsByEmail(request.getEmail())){
@@ -54,8 +56,24 @@ public class AuthenticationService {
 
         String token = jwtService.generateToken(request.getEmail());
 
-        return LoginResponse.builder()
-                .token(token).tokenType("Bearer").message("Login Successful").build();
+return LoginResponse.builder()
+                .token(token)
+                .tokenType("Bearer")
+                .message("Login Successful")
+                .build();
+    }
+
+    public UserResponse getCurrentUserResponse(){
+        User user = authenticationFacade.getCurrentUser();
+        return UserResponse.builder()
+                .id(user.getId())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .monthlyIncome(user.getMonthlyIncome())
+                .employmentType(user.getEmploymentType())
+                .role(user.getRole())
+                .build();
     }
 
 }
