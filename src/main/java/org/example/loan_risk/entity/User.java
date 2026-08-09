@@ -59,11 +59,11 @@ public class User {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
-    @Column(nullable = false)
     private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<LoanApplication> loanApplications = new ArrayList<>();
+
 
 
 }
