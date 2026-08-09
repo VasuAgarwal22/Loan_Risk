@@ -5,11 +5,16 @@ import org.example.loan_risk.dto.request.TransactionRequest;
 import org.example.loan_risk.dto.response.TransactionResponse;
 import org.example.loan_risk.entity.Transaction;
 import org.example.loan_risk.entity.User;
+import org.example.loan_risk.enums.TransactionType;
 import org.example.loan_risk.repository.TransactionRepository;
 import org.example.loan_risk.security.AuthenticationFacade;
+import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,18 +24,38 @@ public class TransactionService{
 
     public TransactionResponse addTransaction(TransactionRequest request){
         User currentUser = authenticationFacade.getCurrentUser();
+        Optional<Transaction> lastTransaction = transactionRepository
+                .findTopByUserOrderByTransactionDateDescIdDesc(currentUser);
+
+        BigDecimal previousBalance = BigDecimal.ZERO;
+
+        if (lastTransaction.isPresent()) {
+            previousBalance =
+                    lastTransaction.get().getBalanceAfterTransaction();
+        }
+
+        if(request.getTransactionType() == TransactionType.DEBIT && request.getAmount().compareTo(previousBalance)>0){
+            throw new RuntimeException("Insufficient Balance");
+        }
+
+        BigDecimal newBalance;
+        if(request.getTransactionType() == TransactionType.CREDIT){
+            newBalance = previousBalance.add(request.getAmount());
+        }else{
+            newBalance = previousBalance.subtract(request.getAmount());
+        }
+
         Transaction transaction = Transaction.builder()
                 .amount(request.getAmount())
                 .transactionType(request.getTransactionType())
                 .transactionCategory(request.getTransactionCategory())
                 .description(request.getDescription())
-                .balanceAfterTransaction(request.getBalanceAfterTransaction())
                 .merchant(request.getMerchant())
                 .status(request.getTransactionStatus())
+                .balanceAfterTransaction(newBalance)
                 .user(currentUser)
                 .build();
-
-        Transaction savedTransaction = transactionRepository.save(transaction);
+        Transaction savedTransaction =  transactionRepository.save(transaction);
 
         return TransactionResponse.builder()
                 .id(savedTransaction.getId())
@@ -38,7 +63,8 @@ public class TransactionService{
                 .transactionType(savedTransaction.getTransactionType())
                 .transactionCategory(savedTransaction.getTransactionCategory())
                 .description(savedTransaction.getDescription())
-                .balanceAfterTransaction(savedTransaction.getBalanceAfterTransaction())
+                .balanceAfterTransaction(
+                        savedTransaction.getBalanceAfterTransaction())
                 .transactionDate(savedTransaction.getTransactionDate())
                 .transactionStatus(savedTransaction.getStatus())
                 .merchant(savedTransaction.getMerchant())
@@ -53,6 +79,7 @@ public class TransactionService{
                 .map(this::mapToResponse)
                 .toList();
     }
+
     private TransactionResponse mapToResponse(Transaction transaction){
         return TransactionResponse.builder()
                 .id(transaction.getId())
@@ -66,5 +93,15 @@ public class TransactionService{
                 .merchant(transaction.getMerchant())
                 .build();
     }
+
+    public BigDecimal getTotalExpenses(User user){
+        List<Transaction> transactions = transactionRepository.findByUserAndTransactionType(user,TransactionType.DEBIT);
+        BigDecimal total = BigDecimal.ZERO;
+        for(Transaction transaction:transactions){
+            total = total.add(transaction.getAmount());
+        }
+        return total;
+    }
+
 
 }

@@ -5,10 +5,14 @@ import org.example.loan_risk.dto.request.RiskAssessmentRequest;
 import org.example.loan_risk.dto.response.RiskAssessmentResponse;
 import org.example.loan_risk.entity.LoanApplication;
 import org.example.loan_risk.entity.RiskAssessment;
+import org.example.loan_risk.entity.User;
 import org.example.loan_risk.enums.RiskLevel;
 import org.example.loan_risk.repository.LoanApplicationRepository;
 import org.example.loan_risk.repository.RiskAssessmentRepository;
+import org.example.loan_risk.security.AuthenticationFacade;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -16,9 +20,32 @@ public class RiskAssessmentService {
 
     private final RiskAssessmentRepository riskAssessmentRepository;
     private final LoanApplicationRepository loanApplicationRepository;
-
+    private final FinancialAnalysisService financialAnalysisService;
+    private final AuthenticationFacade authenticationFacade;
     public RiskAssessmentResponse calculateRisk(Long loanId, RiskAssessmentRequest request) {
+        User user = authenticationFacade.getCurrentUser();
         LoanApplication loan = loanApplicationRepository.findById(loanId).orElseThrow(() -> new RuntimeException("Loan not found"));
+
+        if(!loan.getUser().getId().equals(user.getId())){
+
+            throw new RuntimeException("You are not llowed to access the loan . It belong to the different user ");
+
+        }
+        BigDecimal monthlyIncome = user.getMonthlyIncome();
+        BigDecimal monthlyExpenses = financialAnalysisService.getMonthlyExpense(user);
+        BigDecimal averageBalance = financialAnalysisService.getAverageBalance(user);
+
+        long existingLoans = financialAnalysisService.getExistingLoans(user);
+
+        request.setMonthlyIncome(monthlyIncome);
+        request.setMonthlyExpense(monthlyExpenses);
+        request.setAverageBalance(averageBalance);
+        request.setExistingLoans((int) existingLoans);
+
+//         ye abhi bnega
+        Integer missedPayments = request.getMissedPayments();
+        BigDecimal creditUtilization =
+                request.getCreditUtilization();
         int score = calculateScore(request);
         RiskLevel riskLevel;
         if (score >= 70) {
