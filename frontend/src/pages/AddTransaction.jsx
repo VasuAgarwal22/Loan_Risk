@@ -1,8 +1,15 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import TransactionForm from '../components/TransactionForm'
-import { addTransaction } from '../api'
+import { addTransaction, getErrorMessage } from '../api'
+import {
+  PlusCircle,
+  ArrowLeft,
+  Receipt,
+  ShieldCheck,
+  TrendingUp,
+} from 'lucide-react'
 
 export default function AddTransaction() {
   const [submitting, setSubmitting] = useState(false)
@@ -12,31 +19,56 @@ export default function AddTransaction() {
     setSubmitting(true)
     try {
       await addTransaction(payload)
-      toast.success('Transaction added successfully!')
+      toast.success('Transaction successfully recorded!')
       navigate('/transactions')
     } catch (err) {
-      const msg = err.response?.data?.message || err.response?.data?.error || 'Failed to add transaction'
-      toast.error(Array.isArray(msg) ? msg[0] : msg)
+      toast.error(getErrorMessage(err, 'Failed to record transaction'))
       setSubmitting(false)
     }
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 to-accent-500 text-white p-7 mb-8 shadow-soft animate-fade-in-up">
-        <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-white/10 blur-xl" />
-        <div className="relative">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider">
-            <span className="h-2 w-2 rounded-full bg-white animate-pulse-soft" /> New entry
-          </span>
-          <h1 className="font-display text-2xl font-bold mt-3">Add Transaction</h1>
-          <p className="text-brand-50/90 text-sm mt-1">
-            Record income or expenses to keep your history up to date.
-          </p>
-        </div>
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in space-y-6">
+      {/* Top Breadcrumb Navigation */}
+      <div className="flex items-center justify-between">
+        <Link
+          to="/transactions"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-navy-900 transition"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          <span>Back to Transactions</span>
+        </Link>
+        <span className="text-xs text-slate-400">Financial Ledger Entry</span>
       </div>
-      <div className="glass-card rounded-3xl p-7 sm:p-8 animate-fade-in-up">
-        <TransactionForm onSubmit={handleSubmit} submitting={submitting} />
+
+      <div className="fintech-card p-6 sm:p-8 space-y-6">
+        <div className="flex items-center gap-3 pb-5 border-b border-slate-100">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-50 text-primary-600">
+            <PlusCircle className="h-6 w-6" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-navy-900">
+              Record New Transaction
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Log credits and expenses to keep your behavioral cashflow ledger up to date
+            </p>
+          </div>
+        </div>
+
+        <TransactionForm
+          onSubmit={handleSubmit}
+          submitting={submitting}
+          onCancel={() => navigate('/transactions')}
+        />
+      </div>
+
+      {/* Trust Notice */}
+      <div className="rounded-2xl bg-slate-100/70 border border-slate-200/60 p-4 flex items-center gap-3 text-xs text-slate-500">
+        <ShieldCheck className="h-5 w-5 text-primary-500 shrink-0" />
+        <p>
+          Recorded transactions directly feed into the automated debt-to-income and cash flow analysis algorithms during loan risk assessments.
+        </p>
       </div>
     </div>
   )
