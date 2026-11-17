@@ -10,6 +10,7 @@ import org.example.loan_risk.dto.response.UserResponse;
 import org.example.loan_risk.service.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
+private final AuthenticationService authenticationService;
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser(){
+        return ResponseEntity.ok(authenticationService.getCurrentUserResponse());
+    }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request){
