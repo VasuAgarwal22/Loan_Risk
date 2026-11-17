@@ -45,8 +45,13 @@ public class RiskAssessment {
     private String recommendation;
     private Integer prediction;
     private String predictionLabel;
+    @Column(precision = 38, scale = 10)
     private BigDecimal defaultProbability;
+
+    @Column(precision = 38, scale = 10)
     private BigDecimal loanToIncomeRatio;
+
+    @Column(precision = 38, scale = 10)
     private BigDecimal debtToIncomeRatio;
 
     @Column(columnDefinition = "TEXT")
