@@ -14,6 +14,7 @@ import {
   X,
   ChevronDown,
   User as UserIcon,
+  ShieldAlert,
 } from 'lucide-react'
 
 const navItems = [
@@ -32,6 +33,10 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
+
+  const isOfficerOrAdmin =
+    user?.email?.toLowerCase() === 'ujjawal@gmail.com' &&
+    (user?.role === 'BANK_OFFICER' || user?.role === 'ADMIN')
 
   // Close menus on route change
   useEffect(() => {
@@ -105,6 +110,23 @@ export default function Navbar() {
                   </NavLink>
                 )
               })}
+
+              {/* Officer Portal Link (visible to BANK_OFFICER and ADMIN) */}
+              {isOfficerOrAdmin && (
+                <NavLink
+                  to="/officer-portal"
+                  className={({ isActive }) =>
+                    `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-150 border ml-2 ${
+                      isActive
+                        ? 'bg-emerald-500 text-white border-emerald-400 shadow-sm'
+                        : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/25 hover:text-white'
+                    }`
+                  }
+                >
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  <span>Officer Portal</span>
+                </NavLink>
+              )}
             </nav>
           )}
 
@@ -119,7 +141,13 @@ export default function Navbar() {
                   className="flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-navy-800/80 border border-navy-700/60 hover:bg-navy-800 transition focus:outline-none"
                   aria-expanded={profileDropdownOpen}
                 >
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-500/20 text-primary-400 text-xs font-bold border border-primary-500/30">
+                  <div
+                    className={`flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold border ${
+                      isOfficerOrAdmin
+                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                        : 'bg-primary-500/20 text-primary-400 border-primary-500/30'
+                    }`}
+                  >
                     {userInitials}
                   </div>
                   <div className="hidden sm:block text-left">
@@ -127,7 +155,7 @@ export default function Navbar() {
                       {user.fullName || 'User'}
                     </p>
                     <p className="text-[10px] text-slate-400 leading-none mt-1">
-                      {user.employmentType ? user.employmentType.replace('_', ' ') : 'Account'}
+                      {user.role ? user.role.replace('_', ' ') : 'Account'}
                     </p>
                   </div>
                   <ChevronDown
@@ -150,10 +178,16 @@ export default function Navbar() {
                     </div>
 
                     <div className="py-1">
-                      <div className="px-4 py-1.5 text-[11px] text-slate-500 flex justify-between">
+                      <div className="px-4 py-1.5 text-[11px] text-slate-500 flex justify-between items-center">
                         <span>Role</span>
-                        <span className="font-semibold text-slate-700">
-                          {user.role || 'USER'}
+                        <span
+                          className={`font-bold px-1.5 py-0.5 rounded text-[10px] uppercase ${
+                            isOfficerOrAdmin
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                              : 'bg-slate-100 text-slate-700'
+                          }`}
+                        >
+                          {user.role || 'CUSTOMER'}
                         </span>
                       </div>
                       {user.monthlyIncome && (
@@ -165,6 +199,20 @@ export default function Navbar() {
                         </div>
                       )}
                     </div>
+
+                    {/* Officer Portal Link inside dropdown for quick access */}
+                    {isOfficerOrAdmin && (
+                      <div className="py-1 border-t border-slate-100">
+                        <NavLink
+                          to="/officer-portal"
+                          onClick={() => setProfileDropdownOpen(false)}
+                          className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 transition"
+                        >
+                          <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                          <span>Officer Portal</span>
+                        </NavLink>
+                      </div>
+                    )}
 
                     <div className="pt-1 border-t border-slate-100">
                       <button
@@ -230,6 +278,24 @@ export default function Navbar() {
               </NavLink>
             )
           })}
+
+          {/* Officer Portal Link in mobile menu */}
+          {isOfficerOrAdmin && (
+            <NavLink
+              to="/officer-portal"
+              onClick={() => setMobileMenuOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition border mt-2 ${
+                  isActive
+                    ? 'bg-emerald-500 text-white border-emerald-400'
+                    : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                }`
+              }
+            >
+              <ShieldCheck className="h-4 w-4" />
+              <span>Officer Portal</span>
+            </NavLink>
+          )}
 
           <div className="pt-3 mt-2 border-t border-navy-800 flex justify-between items-center px-2">
             <div className="flex items-center gap-2">

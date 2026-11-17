@@ -16,6 +16,10 @@ export const getMyLoans = () => api.get('/loans')
 // ---- Risk Assessment ----
 export const calculateRisk = (loanId, data) => api.post(`/risk/${loanId}`, data)
 
+// ---- Admin / Officer Portal ----
+export const getAdminLoans = () => api.get('/admin/loans')
+export const updateLoanStatus = (loanId, data) => api.put(`/admin/loans/${loanId}/status`, data)
+
 // ---- Test (JWT check) ----
 export const testAuth = () => api.get('/test')
 
@@ -29,5 +33,6 @@ export const getErrorMessage = (err, fallback) => {
   if (data?.error) return data.error
   if (Array.isArray(data)) return data[0] || fallback
   if (err?.response?.status === 401) return 'Session expired. Please login again.'
+  if (err?.response?.status === 403) return 'Access denied. Bank Officer or Admin permissions required.'
   return fallback || 'Something went wrong. Please try again.'
 }

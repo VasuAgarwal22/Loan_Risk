@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import ProtectedRoute from './components/ProtectedRoute'
+import OfficerRoute from './components/OfficerRoute'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
@@ -10,6 +11,7 @@ import AddTransaction from './pages/AddTransaction'
 import ApplyLoan from './pages/ApplyLoan'
 import MyLoans from './pages/MyLoans'
 import RiskAssessment from './pages/RiskAssessment'
+import OfficerPortal from './pages/OfficerPortal'
 import { ShieldCheck, Lock } from 'lucide-react'
 
 export default function App() {
@@ -78,6 +80,23 @@ export default function App() {
               <ProtectedRoute>
                 <RiskAssessment />
               </ProtectedRoute>
+            }
+          />
+          {/* Bank Officer & Administrator Underwriting Portal */}
+          <Route
+            path="/officer-portal"
+            element={
+              <OfficerRoute>
+                <OfficerPortal />
+              </OfficerRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <OfficerRoute>
+                <OfficerPortal />
+              </OfficerRoute>
             }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
